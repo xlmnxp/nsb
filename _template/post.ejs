@@ -1,0 +1,9 @@
+<% blog.title = blog.title + " - " + post.subject %>
+
+<%- include('header', { blog: blog }); %>
+
+<h1>Subject <%= post.subject %></h1>
+<p>create in <%= post.created %> <%= (post.created != post.lastupdate) ? post.lastupdate : '' %></>
+<div><%- post.context %></div>
+
+<%- include('footer'); %>

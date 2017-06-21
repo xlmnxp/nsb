@@ -1,0 +1,8 @@
+<%- include('header', { blog: blog }); %>
+
+<% posts.forEach((post) =>{ %>
+    <h3><a href="<%= blog.url+'/'+post.link %>"><%= post.subject %></a></h3>
+    <p><%= post.created %></p>
+<% }); %>
+
+<%- include('footer'); %>
