@@ -23,19 +23,23 @@ function deleteFolderRecursive(path: string) {
 };
 
 
-function pagination(pages: number,results: number,total: number,page: number): Array<Object>{
+function pagination(total: number,page: number): Array<Object>{
         var result:Array<Object> = [];
         if (page < 1) page = 1;
+        var pagination = blogInfo().pagination;
 
-        var numberOfPages = pages;
-        var resultsPerPage = results;
-        var numberOfRows = total;
-        var totalPages = Math.ceil(numberOfRows / resultsPerPage);
+        var pages: number = pagination.size;
+        var results: number = pagination.resultsPerPage;
 
-        var halfPages = Math.floor( numberOfPages / 2);
+        var numberOfPages: number = pages;
+        var resultsPerPage: number = results;
+        var numberOfRows: number = total;
+        var totalPages: number = Math.ceil(numberOfRows / resultsPerPage);
+
+        var halfPages: number = Math.floor( numberOfPages / 2);
         var range = {'start': 1, 'end': totalPages};
-        var isEven = (numberOfPages % 2 == 0);
-        var atRangeEnd = totalPages - halfPages;
+        var isEven: boolean = (numberOfPages % 2 == 0);
+        var atRangeEnd: number = totalPages - halfPages;
 
         if(isEven)
         {
@@ -59,7 +63,7 @@ function pagination(pages: number,results: number,total: number,page: number): A
         }
 
         if(page > 1){
-            result.push({"page": (page - 1), "name": "<", "active": false });
+            result.push({"page": (page - 1), "name": pagination.previous, "active": false });
         }
 
         for (let i = range['start']; i <= range['end']; i++)
@@ -72,7 +76,7 @@ function pagination(pages: number,results: number,total: number,page: number): A
         }
 
         if (page < totalPages){
-            result.push({"page": (page + 1),"name": ">", "active": false });
+            result.push({"page": (page + 1),"name": pagination.next, "active": false });
         }
 
         return result;
@@ -157,7 +161,7 @@ try{
             fs.writeFile(`${__dirname}/../pages/page-${i+1}.html`,
                 render(fs.readFileSync(`${__dirname}/../_template/index.ejs`,'utf-8'),{
                     posts: posts.reverse().slice(i*12, i+1*12),
-                    pages: pagination(8,12,posts.length,i+1),
+                    pages: pagination(posts.length,i+1),
                     blog: blogInfo(),
                     pageNumber: i+1
                 },{
@@ -175,7 +179,7 @@ try{
         fs.writeFile(`${__dirname}/../index.html`,
             render(fs.readFileSync(`${__dirname}/../_template/index.ejs`,'utf-8'),{
                 posts: posts.reverse().slice(0, 12),
-                pages: pagination(8,12,posts.length,1),
+                pages: pagination(posts.length,1),
                 blog: blogInfo(),
                 pageNumber: 1
             },{

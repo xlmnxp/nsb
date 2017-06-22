@@ -23,10 +23,13 @@ function deleteFolderRecursive(path) {
     }
 }
 ;
-function pagination(pages, results, total, page) {
+function pagination(total, page) {
     var result = [];
     if (page < 1)
         page = 1;
+    var pagination = blogInfo().pagination;
+    var pages = pagination.size;
+    var results = pagination.resultsPerPage;
     var numberOfPages = pages;
     var resultsPerPage = results;
     var numberOfRows = total;
@@ -53,7 +56,7 @@ function pagination(pages, results, total, page) {
         }
     }
     if (page > 1) {
-        result.push({ "page": (page - 1), "name": "<", "active": false });
+        result.push({ "page": (page - 1), "name": pagination.previous, "active": false });
     }
     for (var i = range['start']; i <= range['end']; i++) {
         if (i == page) {
@@ -64,7 +67,7 @@ function pagination(pages, results, total, page) {
         }
     }
     if (page < totalPages) {
-        result.push({ "page": (page + 1), "name": ">", "active": false });
+        result.push({ "page": (page + 1), "name": pagination.next, "active": false });
     }
     return result;
 }
@@ -141,7 +144,7 @@ finally {
         for (var i = 0; i < totalPages; i++) {
             fs.writeFile(__dirname + "/../pages/page-" + (i + 1) + ".html", ejs_1.render(fs.readFileSync(__dirname + "/../_template/index.ejs", 'utf-8'), {
                 posts: posts.reverse().slice(i * 12, i + 1 * 12),
-                pages: pagination(8, 12, posts.length, i + 1),
+                pages: pagination(posts.length, i + 1),
                 blog: blogInfo(),
                 pageNumber: i + 1
             }, {
@@ -156,7 +159,7 @@ finally {
         }
         fs.writeFile(__dirname + "/../index.html", ejs_1.render(fs.readFileSync(__dirname + "/../_template/index.ejs", 'utf-8'), {
             posts: posts.reverse().slice(0, 12),
-            pages: pagination(8, 12, posts.length, 1),
+            pages: pagination(posts.length, 1),
             blog: blogInfo(),
             pageNumber: 1
         }, {

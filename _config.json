@@ -2,5 +2,11 @@
     "title": "مدونة تجريبية",
     "url": "https://runbb.github.io/nsb",
     "charset": "utf-8",
-    "description": "مدونة عملية جدًا"
+    "description": "مدونة عملية جدًا",
+    "pagination":{
+        "previous": "السابق",
+        "size": 8,
+        "resultsPerPage": 12,
+        "next": "التالي"        
+    }
 }
