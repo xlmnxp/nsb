@@ -1,8 +1,16 @@
-<%- include('header', { blog: blog }); %>
+<%- include('header', { blog: blog,title :blog.title + " - الصفحة " + pageNumber }); %>
 
 <% posts.forEach((post) =>{ %>
     <h3><a href="<%= blog.url+'/'+post.link %>"><%= post.subject %></a></h3>
-    <p><%= post.created %></p>
+    <p><%= post.created.toDateString() %></p>
 <% }); %>
+
+<center>
+<% pages.forEach((page) =>{ %>
+<ul class="pagination">
+    <li class="page-item <%= page.active?"active":"" %>" ><a class="page-link" href="<%= blog.url %>/pages/page-<%= page.page %>.html"><%= page.name %></a></li>
+</ul>
+<% }); %>
+</center>
 
 <%- include('footer'); %>

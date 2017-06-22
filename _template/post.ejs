@@ -1,9 +1,7 @@
-<% blog.title = blog.title + " - " + post.subject %>
-
-<%- include('header', { blog: blog }); %>
+<%- include('header', { blog: blog,title: post.subject }); %>
 
 <h1>Subject <%= post.subject %></h1>
-<p>create in <%= post.created %> <%= (post.created != post.lastupdate) ? post.lastupdate : '' %></>
+<p>create in <%= post.created.toDateString() %> <%= (post.created != post.lastupdate) ? post.lastupdate.toDateString() : '' %></>
 <div><%- post.context %></div>
 
 <%- include('footer'); %>
