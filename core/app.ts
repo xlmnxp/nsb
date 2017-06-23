@@ -157,24 +157,34 @@ try{
 
         var totalPages = Math.ceil(posts.length / 12);
 
-        for (var i = 0; i < totalPages; i++) {
-            fs.writeFile(`${__dirname}/../pages/page-${i+1}.html`,
-                render(fs.readFileSync(`${__dirname}/../_template/index.ejs`,'utf-8'),{
-                    posts: posts.reverse().slice(i*12, i+1*12),
-                    pages: pagination(posts.length,i+1),
-                    blog: blogInfo(),
-                    pageNumber: i+1
-                },{
-                    filename: `${__dirname}/../_template/index.ejs`
-                }),(err: NodeJS.ErrnoException)=>{
-                    if(err){
-                        console.error(err);
-                        return;
-                    }
-            });
+        deleteFolderRecursive(`${__dirname}/../page`);
+        fs.mkdir(`${__dirname}/../page`,(err: NodeJS.ErrnoException)=>{
+            if(err){
+                console.error(err);
+                return;
+            }
 
-            console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"page-${i+1}.html"`)} ${chalk.blue('created')}. `);            
-        }
+            for (var i = 0; i < totalPages; i++) {
+
+                fs.mkdirSync(`${__dirname}/../page/${i+1}`,"0777")
+                fs.writeFile(`${__dirname}/../page/${i+1}/index.html`,
+                    render(fs.readFileSync(`${__dirname}/../_template/index.ejs`,'utf-8'),{
+                        posts: posts.reverse().slice(i*12, i+1*12),
+                        pages: pagination(posts.length,i+1),
+                        blog: blogInfo(),
+                        pageNumber: i+1
+                    },{
+                        filename: `${__dirname}/../_template/index.ejs`
+                    }),(err: NodeJS.ErrnoException)=>{
+                        if(err){
+                            console.error(err);
+                            return;
+                        }
+                    });
+
+                    console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"page-${i+1}.html"`)} ${chalk.blue('created')}. `);            
+            }
+        });
 
         fs.writeFile(`${__dirname}/../index.html`,
             render(fs.readFileSync(`${__dirname}/../_template/index.ejs`,'utf-8'),{
@@ -189,6 +199,7 @@ try{
                     console.error(err);
                     return;
                 }
+
                 console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
         });
     },5000);

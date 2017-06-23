@@ -8,7 +8,7 @@
 <center>
 <% pages.forEach((page) =>{ %>
 <ul class="pagination">
-    <li class="page-item <%= page.active?"active":"" %>" ><a class="page-link" href="<%= blog.url %>/pages/page-<%= page.page %>.html"><%= page.name %></a></li>
+    <li class="page-item <%= page.active?"active":"" %>" ><a class="page-link" href="<%= blog.url %>/page/<%= page.page %>/index.html"><%= page.name %></a></li>
 </ul>
 <% }); %>
 </center>

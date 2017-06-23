@@ -141,22 +141,30 @@ finally {
             return a.created - b.created;
         });
         var totalPages = Math.ceil(posts.length / 12);
-        for (var i = 0; i < totalPages; i++) {
-            fs.writeFile(__dirname + "/../pages/page-" + (i + 1) + ".html", ejs_1.render(fs.readFileSync(__dirname + "/../_template/index.ejs", 'utf-8'), {
-                posts: posts.reverse().slice(i * 12, i + 1 * 12),
-                pages: pagination(posts.length, i + 1),
-                blog: blogInfo(),
-                pageNumber: i + 1
-            }, {
-                filename: __dirname + "/../_template/index.ejs"
-            }), function (err) {
-                if (err) {
-                    console.error(err);
-                    return;
-                }
-            });
-            console.log(chalk.cyan("[info]") + " " + chalk.magenta("\"page-" + (i + 1) + ".html\"") + " " + chalk.blue('created') + ". ");
-        }
+        deleteFolderRecursive(__dirname + "/../page");
+        fs.mkdir(__dirname + "/../page", function (err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            for (var i = 0; i < totalPages; i++) {
+                fs.mkdirSync(__dirname + "/../page/" + (i + 1), "0777");
+                fs.writeFile(__dirname + "/../page/" + (i + 1) + "/index.html", ejs_1.render(fs.readFileSync(__dirname + "/../_template/index.ejs", 'utf-8'), {
+                    posts: posts.reverse().slice(i * 12, i + 1 * 12),
+                    pages: pagination(posts.length, i + 1),
+                    blog: blogInfo(),
+                    pageNumber: i + 1
+                }, {
+                    filename: __dirname + "/../_template/index.ejs"
+                }), function (err) {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                });
+                console.log(chalk.cyan("[info]") + " " + chalk.magenta("\"page-" + (i + 1) + ".html\"") + " " + chalk.blue('created') + ". ");
+            }
+        });
         fs.writeFile(__dirname + "/../index.html", ejs_1.render(fs.readFileSync(__dirname + "/../_template/index.ejs", 'utf-8'), {
             posts: posts.reverse().slice(0, 12),
             pages: pagination(posts.length, 1),
