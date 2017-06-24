@@ -4,7 +4,7 @@ node_js: "stable"
 install:
   - npm install
 script:
-  - sudo npm start
+  - npm start
 
 deploy:
   provider: pages
