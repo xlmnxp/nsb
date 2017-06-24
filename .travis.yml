@@ -6,3 +6,5 @@ install:
   - npm install
 script:
   - npm start
+before_script:
+  - bash ./deploy.sh
