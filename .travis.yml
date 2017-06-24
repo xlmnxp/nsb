@@ -1,9 +1,7 @@
 language: node_js
 sudo: true
-node_js:
-  - "7.1"
+node_js: "stable"
 install:
   - npm install
 script:
   - npm start
-  - bash ./deploy.sh
