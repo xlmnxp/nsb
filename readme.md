@@ -13,6 +13,7 @@ $ [sudo] npm install
 ```json
 {
     "rtl": true,
+    "locale": "ar",
     "title": "اسم المدونة",
     "url": "الرابط للصفحة الرائيسية من دون '/' في الاحير",
     "charset": "ترميز المدونة", 
