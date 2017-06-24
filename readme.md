@@ -7,7 +7,7 @@
 ```sh
 $ git clone https://github.com/runbb/nsb.git
 $ cd nsb
-$ npm install
+$ [sudo] npm install
 ```
 وتقوم بتعديل ملف `_config.json`
 ```json
@@ -38,6 +38,6 @@ $ sudo npm start
 ### من ثم قم برفعها لمستودعك في github
 ```sh
 $ [sudo] git add .
-$ [sudo] commit -m "commit"
+$ [sudo] git commit -m "commit"
 $ [sudo] git push
 ```
