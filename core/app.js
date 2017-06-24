@@ -141,6 +141,7 @@ finally {
         posts.sort(function (a, b) {
             return a.created - b.created;
         });
+        posts = posts.reverse();
         var totalPages = Math.ceil(posts.length / 12);
         deleteFolderRecursive(path_1.normalize(__dirname + "/../page"));
         fs_1.mkdir(path_1.normalize(__dirname + "/../page"), function (err) {
@@ -151,7 +152,7 @@ finally {
             for (var i = 0; i < totalPages; i++) {
                 fs_1.mkdirSync(path_1.normalize(__dirname + "/../page/" + (i + 1)), "0777");
                 fs_1.writeFile(path_1.normalize(__dirname + "/../page/" + (i + 1) + "/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/index.ejs"), 'utf-8'), {
-                    posts: posts.reverse().slice(i * 12, i + 1 * 12),
+                    posts: posts.slice(i * 12, i + 1 * 12),
                     pages: pagination(posts.length, i + 1),
                     blog: blogInfo(),
                     pageNumber: i + 1
@@ -167,7 +168,7 @@ finally {
             }
         });
         fs_1.writeFile(path_1.normalize(__dirname + "/../index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/index.ejs"), 'utf-8'), {
-            posts: posts.reverse().slice(0, 12),
+            posts: posts.slice(0, 12),
             pages: pagination(posts.length, 1),
             blog: blogInfo(),
             pageNumber: 1
