@@ -157,7 +157,7 @@ try{
         posts.sort(function(a:any,b:any){
             return a.created - b.created;
         });
-
+        posts = posts.reverse();
         var totalPages = Math.ceil(posts.length / 12);
 
         deleteFolderRecursive(normalize(`${__dirname}/../page`));
@@ -172,7 +172,7 @@ try{
                 mkdirSync(normalize(`${__dirname}/../page/${i+1}`),"0777")
                 writeFile(normalize(`${__dirname}/../page/${i+1}/index.html`),
                     render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
-                        posts: posts.reverse().slice(i*12, i+1*12),
+                        posts: posts.slice(i*12, i+1*12),
                         pages: pagination(posts.length,i+1),
                         blog: blogInfo(),
                         pageNumber: i+1
@@ -191,7 +191,7 @@ try{
 
         writeFile(normalize(`${__dirname}/../index.html`),
             render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
-                posts: posts,
+                posts: posts.slice(0, 12),
                 pages: pagination(posts.length,1),
                 blog: blogInfo(),
                 pageNumber: 1
