@@ -191,7 +191,7 @@ try{
 
         writeFile(normalize(`${__dirname}/../index.html`),
             render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
-                posts: posts.reverse().slice(0, 12),
+                posts: posts,
                 pages: pagination(posts.length,1),
                 blog: blogInfo(),
                 pageNumber: 1
