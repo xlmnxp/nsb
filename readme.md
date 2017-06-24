@@ -1,6 +1,7 @@
 # nsb ( مدونة ثابته لـ Github Pages )
 [![Build Status](https://travis-ci.org/runbb/nsb.svg?branch=master)](https://travis-ci.org/runbb/nsb)
-
+[![npm](https://img.shields.io/npm/v/npm.svg)]()
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)]()
 ## طريقة التركيب
 تقوم بنسخ المستودع لجهازك
 ```sh
