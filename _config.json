@@ -1,12 +1,12 @@
 {
-    "title": "مدونة تجريبية", // اسم المدونة
-    "url": "https://runbb.github.io/nsb", // الرابط للصفحة الرائيسية من دون "/" في الاحير
-    "charset": "utf-8", // ترميز المدونة
-    "description": "مدونة عملية جدًا", // وصف المدونة
-    "pagination":{ // الصفحات
-        "previous": "السابق", // زر الصفحة السابقة
-        "size": 8, // عدد ازرار الارقام التي تظهر في شريط التقل بين الصفحات
-        "resultsPerPage": 12, // عدد التدوينات في الصفحة
-        "next": "التالي" // زر الصفحة التالي      
+    "title": "مدونة تجريبية",
+    "url": "https://runbb.github.io/nsb",
+    "charset": "utf-8",
+    "description": "مدونة عملية جدًا",
+    "pagination":{
+        "previous": "السابق",
+        "size": 8,
+        "resultsPerPage": 12,
+        "next": "التالي"        
     }
 }
