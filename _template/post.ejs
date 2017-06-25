@@ -1,7 +1,7 @@
 <%- include('header', { blog: blog,title: post.subject }); %>
 
-<h1>الموضوع <%= post.subject %></h1>
-<p>تم إنشاء الموضوع في <%= post.created.toDateString() %> <%= (post.created != post.lastupdate) ? post.lastupdate.toDateString() : '' %></>
-<div><%- post.context %></div>
+<h1>الموضوع: <%= post.subject %></h1>
+<p>تم الإنشاء في <%= post.created %> </p>
+<div class="post"><%- post.context %></div>
 
 <%- include('footer'); %>
