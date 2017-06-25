@@ -3,6 +3,9 @@
 <% posts.forEach((post) =>{ %>
     <h3><a href="<%= blog.url+'/'+post.link %>"><%= post.subject %></a></h3>
     <p><script>document.write(moment('<%= post.created %>').fromNow());</script></p>
+    <div class="post">
+        <%- post.context %>
+    </div>
 <% }); %>
 
 <center>
