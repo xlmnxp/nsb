@@ -139,9 +139,8 @@ catch (e) {
 finally {
     setTimeout(function () {
         posts.sort(function (a, b) {
-            return a.created - b.created;
+            return b.created - a.created;
         });
-        posts = posts.reverse();
         var totalPages = Math.ceil(posts.length / 12);
         deleteFolderRecursive(path_1.normalize(__dirname + "/../page"));
         fs_1.mkdir(path_1.normalize(__dirname + "/../page"), function (err) {

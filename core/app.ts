@@ -155,9 +155,9 @@ try{
     setTimeout(()=>{
 
         posts.sort(function(a:any,b:any){
-            return a.created - b.created;
+            return b.created - a.created;
         });
-        posts = posts.reverse();
+
         var totalPages = Math.ceil(posts.length / 12);
 
         deleteFolderRecursive(normalize(`${__dirname}/../page`));
