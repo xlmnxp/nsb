@@ -139,6 +139,7 @@ try{
                                 subject: subject,
                                 created: created,
                                 lastupdate: lastupdate,
+                                context: context,
                                 link: normalize(`posts/${foldername}/${filename}.html`)
                             });
 

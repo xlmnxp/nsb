@@ -123,6 +123,7 @@ try {
                                 subject: subject,
                                 created: created,
                                 lastupdate: lastupdate,
+                                context: context,
                                 link: path_1.normalize("posts/" + foldername + "/" + filename + ".html")
                             });
                             console.log(chalk.cyan("[info]") + " " + chalk.magenta("\"" + file + "\"") + " " + chalk.blue('converted to') + " " + chalk.magenta("\"" + foldername + "/" + filename + ".html\"") + ".");
