@@ -10,10 +10,14 @@ after_script:
   - git config user.email "$EMAIL"
   - git init
   - git remote add up "https://$GITHUB_TOKEN@github.com/$USERNAME/$REPO.git"
+  - echo $(pwd)
+  - ls
   - git clone https://github.com/$USERNAME/$REPO.git
   - git checkout -b gh-pages
   - git add $(git  diff-tree --no-commit-id --name-only -r $(git log --pretty=format:'%h' -n 1))
   - git commit -am 'تدوينة جديدة'
+  - echo $(pwd)
+  - ls
   - git push -f up gh-pages
 # deploy:
 #   provider: pages
