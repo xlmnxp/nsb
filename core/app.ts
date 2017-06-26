@@ -8,7 +8,7 @@ import { normalize } from 'path';
 import { render } from 'ejs';
 
 var posts:Array<Object> = [];
-var blog:Object = <Object>JSON.parse(readFileSync(normalize(`${__dirname}/../_config.json`),"utf-8"));
+var blog:Object = <Object>JSON.parse(readFileSync(normalize(`${__dirname}/../out/_config.json`),"utf-8"));
 var blogInfo:any = ():Object => JSON.parse(JSON.stringify(blog));
 
 function deleteFolderRecursive(path: string) {
@@ -86,20 +86,22 @@ function pagination(total: number,page: number): Array<Object>{
 }
 
 try{
-    deleteFolderRecursive(normalize(`${__dirname}/../posts`));
-    mkdir(normalize(`${__dirname}/../posts`),"0777",(err: NodeJS.ErrnoException)=>{
+    deleteFolderRecursive(normalize(`${__dirname}/../out`));
+    mkdirSync(normalize(`${__dirname}/../out`),"0777");
+    deleteFolderRecursive(normalize(`${__dirname}/../out/posts`));
+    mkdir(normalize(`${__dirname}/../out/posts`),"0777",(err: NodeJS.ErrnoException)=>{
         if(err){
             console.error(err);
             return;
         }
-        readdir(normalize(`${__dirname}/../mdposts`),(err: NodeJS.ErrnoException, files: string[])=>{
+        readdir(normalize(`${__dirname}/../out/mdposts`),(err: NodeJS.ErrnoException, files: string[])=>{
             if(err){
                 console.error(err);
                 return;
             }
             files.forEach((file:string,index: number)=>{
                 setTimeout(()=>{
-                    stat(normalize(`${__dirname}/../mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
+                    stat(normalize(`${__dirname}/../out/mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
                         if(err){
                             console.error(err);
                             return;
@@ -110,13 +112,13 @@ try{
                         var foldername = created.toDateString().replace(/\s+/g,'-').toLowerCase();
                         var subject = file.substr(0,file.length-3);
                         var filename = subject.replace(/\s+/g,'-').toLowerCase();
-                        var outFile = normalize(`${__dirname}/../posts/${foldername}/${filename}.html`);
-                        var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"),{gfm:true});
-                        if(!existsSync(normalize(`${__dirname}/../posts/${foldername}`))){
-                            mkdirSync(normalize(`${__dirname}/../posts/${foldername}`),"0777");
+                        var outFile = normalize(`${__dirname}/../out/posts/${foldername}/${filename}.html`);
+                        var context = marked(readFileSync(normalize(`${__dirname}/../out/mdposts/${file}`),"utf-8"),{gfm:true});
+                        if(!existsSync(normalize(`${__dirname}/../out/posts/${foldername}`))){
+                            mkdirSync(normalize(`${__dirname}/../out/posts/${foldername}`),"0777");
                         }
                         
-                        writeFile(outFile,render(readFileSync(normalize(`${__dirname}/../_template/post.ejs`),'utf-8'),{
+                        writeFile(outFile,render(readFileSync(normalize(`${__dirname}/../out/_template/post.ejs`),'utf-8'),{
                             post:{
                                 subject: subject,
                                 created: new Date(created),
@@ -126,7 +128,7 @@ try{
                             },
                             blog: blogInfo()
                         },{
-                            filename: normalize(`${__dirname}/../_template/post.ejs`)
+                            filename: normalize(`${__dirname}/../out/_template/post.ejs`)
                         }
                         ),{
                             encoding: "utf-8"
@@ -161,8 +163,8 @@ try{
 
         var totalPages = Math.ceil(posts.length / 12);
 
-        deleteFolderRecursive(normalize(`${__dirname}/../page`));
-        mkdir(normalize(`${__dirname}/../page`),(err: NodeJS.ErrnoException)=>{
+        deleteFolderRecursive(normalize(`${__dirname}/../out/page`));
+        mkdir(normalize(`${__dirname}/../out/page`),(err: NodeJS.ErrnoException)=>{
             if(err){
                 console.error(err);
                 return;
@@ -170,15 +172,15 @@ try{
 
             for (var i = 0; i < totalPages; i++) {
 
-                mkdirSync(normalize(`${__dirname}/../page/${i+1}`),"0777")
-                writeFile(normalize(`${__dirname}/../page/${i+1}/index.html`),
-                    render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
+                mkdirSync(normalize(`${__dirname}/../out/page/${i+1}`),"0777")
+                writeFile(normalize(`${__dirname}/../out/page/${i+1}/index.html`),
+                    render(readFileSync(normalize(`${__dirname}/../out/_template/index.ejs`),'utf-8'),{
                         posts: posts.slice(i*12, i+1*12),
                         pages: pagination(posts.length,i+1),
                         blog: blogInfo(),
                         pageNumber: i+1
                     },{
-                        filename: normalize(`${__dirname}/../_template/index.ejs`)
+                        filename: normalize(`${__dirname}/../out/_template/index.ejs`)
                     }),(err: NodeJS.ErrnoException)=>{
                         if(err){
                             console.error(err);
@@ -190,14 +192,14 @@ try{
             }
         });
 
-        writeFile(normalize(`${__dirname}/../index.html`),
-            render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
+        writeFile(normalize(`${__dirname}/../out/index.html`),
+            render(readFileSync(normalize(`${__dirname}/../out/_template/index.ejs`),'utf-8'),{
                 posts: posts.slice(0, 12),
                 pages: pagination(posts.length,1),
                 blog: blogInfo(),
                 pageNumber: 1
             },{
-                filename: normalize(`${__dirname}/../_template/index.ejs`)
+                filename: normalize(`${__dirname}/../out/_template/index.ejs`)
             }),(err: NodeJS.ErrnoException)=>{
                 if(err){
                     console.error(err);
