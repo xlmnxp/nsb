@@ -5,6 +5,7 @@ git remote add up "https://$GITHUB_TOKEN@github.com/$USERNAME/$REPO.git"
 git clone https://github.com/$USERNAME/$REPO.git
 git checkout -b gh-pages
 git rm -rf .
+rm -rf !\(out|.git\)
 cp -R ./out/. ./
 git add .
 rm -rf out
