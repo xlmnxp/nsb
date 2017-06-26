@@ -7,7 +7,7 @@ var chalk = require("chalk");
 var path_1 = require("path");
 var ejs_1 = require("ejs");
 var posts = [];
-var blog = JSON.parse(fs_1.readFileSync(path_1.normalize(__dirname + "/../out/_config.json"), "utf-8"));
+var blog = JSON.parse(fs_1.readFileSync(path_1.normalize(__dirname + "/../_config.json"), "utf-8"));
 var blogInfo = function () { return JSON.parse(JSON.stringify(blog)); };
 function deleteFolderRecursive(path) {
     if (fs_1.existsSync(path)) {

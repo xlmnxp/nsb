@@ -8,7 +8,7 @@ import { normalize } from 'path';
 import { render } from 'ejs';
 
 var posts:Array<Object> = [];
-var blog:Object = <Object>JSON.parse(readFileSync(normalize(`${__dirname}/../out/_config.json`),"utf-8"));
+var blog:Object = <Object>JSON.parse(readFileSync(normalize(`${__dirname}/../_config.json`),"utf-8"));
 var blogInfo:any = ():Object => JSON.parse(JSON.stringify(blog));
 
 function deleteFolderRecursive(path: string) {
