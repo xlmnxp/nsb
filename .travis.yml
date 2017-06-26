@@ -6,10 +6,17 @@ install:
 script:
   - npm start
 after_script:
-  - echo $(git  diff-tree --no-commit-id --name-only -r $(git log --pretty=format:'%h' -n 1))
-deploy:
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-  on:
-    branch: master
+  - git config user.name "$USERNAME"
+  - git config user.email "$EMAIL"
+  - git init
+  - git remote add up "https://$GITHUB_TOKEN@github.com/$USERNAME/$REPO.git"
+  - git clone https://github.com/$USERNAME/$REPO.git
+  - git checkout gh-pages
+  - git add $(git  diff-tree --no-commit-id --name-only -r $(git log --pretty=format:'%h' -n 1))
+  - git push -f up gh-pages
+# deploy:
+#   provider: pages
+#   skip_cleanup: true
+#   github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+#   on:
+#     branch: master
