@@ -1,4 +1,4 @@
-<%- include('header', { blog: blog,title :blog.title + " - الصفحة " + pageNumber }); %>
+<%- include('header', { blog: blog,title :blog.title + " - الصفحة " + pageNumber, pageNumber: pageNumber }); %>
 
 <% posts.forEach((post) =>{ %>
     <h3><a href="<%= blog.url+'/'+post.link %>"><%= post.subject %></a></h3>

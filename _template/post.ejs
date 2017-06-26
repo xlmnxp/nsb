@@ -1,4 +1,4 @@
-<%- include('header', { blog: blog,title: post.subject }); %>
+<%- include('header', { blog: blog,title: post.subject,pageNumber: -1 }); %>
 
 <h1>الموضوع: <%= post.subject %></h1>
 <p>تم الإنشاء في <script>document.write(moment('<%= post.created %>').format('MMMM Do YYYY, h:mm:ss a'));</script></p>
