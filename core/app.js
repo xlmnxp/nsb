@@ -81,14 +81,14 @@ try {
             console.error(err);
             return;
         }
-        fs_1.readdir(path_1.normalize(__dirname + "/../out/mdposts"), function (err, files) {
+        fs_1.readdir(path_1.normalize(__dirname + "/../mdposts"), function (err, files) {
             if (err) {
                 console.error(err);
                 return;
             }
             files.forEach(function (file, index) {
                 setTimeout(function () {
-                    fs_1.stat(path_1.normalize(__dirname + "/../out/mdposts/" + file), function (err, stat) {
+                    fs_1.stat(path_1.normalize(__dirname + "/../mdposts/" + file), function (err, stat) {
                         if (err) {
                             console.error(err);
                             return;
@@ -99,11 +99,11 @@ try {
                         var subject = file.substr(0, file.length - 3);
                         var filename = subject.replace(/\s+/g, '-').toLowerCase();
                         var outFile = path_1.normalize(__dirname + "/../out/posts/" + foldername + "/" + filename + ".html");
-                        var context = marked(fs_1.readFileSync(path_1.normalize(__dirname + "/../out/mdposts/" + file), "utf-8"), { gfm: true });
+                        var context = marked(fs_1.readFileSync(path_1.normalize(__dirname + "/../mdposts/" + file), "utf-8"), { gfm: true });
                         if (!fs_1.existsSync(path_1.normalize(__dirname + "/../out/posts/" + foldername))) {
                             fs_1.mkdirSync(path_1.normalize(__dirname + "/../out/posts/" + foldername), "0777");
                         }
-                        fs_1.writeFile(outFile, ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../out/_template/post.ejs"), 'utf-8'), {
+                        fs_1.writeFile(outFile, ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/post.ejs"), 'utf-8'), {
                             post: {
                                 subject: subject,
                                 created: new Date(created),
@@ -113,7 +113,7 @@ try {
                             },
                             blog: blogInfo()
                         }, {
-                            filename: path_1.normalize(__dirname + "/../out/_template/post.ejs")
+                            filename: path_1.normalize(__dirname + "/../_template/post.ejs")
                         }), {
                             encoding: "utf-8"
                         }, function (err) {
@@ -153,13 +153,13 @@ finally {
             }
             for (var i = 0; i < totalPages; i++) {
                 fs_1.mkdirSync(path_1.normalize(__dirname + "/../out/page/" + (i + 1)), "0777");
-                fs_1.writeFile(path_1.normalize(__dirname + "/../out/page/" + (i + 1) + "/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../out/_template/index.ejs"), 'utf-8'), {
+                fs_1.writeFile(path_1.normalize(__dirname + "/../out/page/" + (i + 1) + "/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/index.ejs"), 'utf-8'), {
                     posts: posts.slice(i * 12, i + 1 * 12),
                     pages: pagination(posts.length, i + 1),
                     blog: blogInfo(),
                     pageNumber: i + 1
                 }, {
-                    filename: path_1.normalize(__dirname + "/../out/_template/index.ejs")
+                    filename: path_1.normalize(__dirname + "/../_template/index.ejs")
                 }), function (err) {
                     if (err) {
                         console.error(err);
@@ -169,13 +169,13 @@ finally {
                 console.log(chalk.cyan("[info]") + " " + chalk.magenta("\"page-" + (i + 1) + ".html\"") + " " + chalk.blue('created') + ". ");
             }
         });
-        fs_1.writeFile(path_1.normalize(__dirname + "/../out/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../out/_template/index.ejs"), 'utf-8'), {
+        fs_1.writeFile(path_1.normalize(__dirname + "/../out/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/index.ejs"), 'utf-8'), {
             posts: posts.slice(0, 12),
             pages: pagination(posts.length, 1),
             blog: blogInfo(),
             pageNumber: 1
         }, {
-            filename: path_1.normalize(__dirname + "/../out/_template/index.ejs")
+            filename: path_1.normalize(__dirname + "/../_template/index.ejs")
         }), function (err) {
             if (err) {
                 console.error(err);
