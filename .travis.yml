@@ -7,4 +7,4 @@ script:
   - npm start
 after_script:
   - chmod +x deploy.sh
-  - deploy.sh
+  - ./deploy.sh
