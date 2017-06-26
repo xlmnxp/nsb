@@ -6,7 +6,7 @@ install:
 script:
   - npm start
 after_script:
-  - $(git  diff-tree --no-commit-id --name-only -r $(git log --pretty=format:'%h' -n 1))
+  - echo $(git  diff-tree --no-commit-id --name-only -r $(git log --pretty=format:'%h' -n 1))
 deploy:
   provider: pages
   skip_cleanup: true
