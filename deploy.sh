@@ -8,6 +8,6 @@ git rm -rf .
 rm -rf !\("out"|".git"|".gitignore"\)
 cp -R ./out/. ./
 git add .
-rm -rf out
+rm -rf out node_modules nsb
 git commit -am 'تدوينة جديدة'
 git push -f up gh-pages
