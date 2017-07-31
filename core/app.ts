@@ -1,11 +1,14 @@
 #! /usr/bin/env node
-import * as marked from 'marked';
 import { readFile, readdirSync, readFileSync, existsSync,
          lstatSync, unlinkSync, rmdirSync, mkdir, writeFile, mkdirSync,
          readdir,stat, Stats } from 'fs';
 import * as chalk from 'chalk';
 import { normalize } from 'path';
 import { render } from 'ejs';
+
+declare const require: (module: string) => any;
+
+const marked = require('markdown-it')().render;
 
 var posts:Array<Object> = [];
 var blog:Object = <Object>JSON.parse(readFileSync(normalize(`${__dirname}/../_config.json`),"utf-8"));
