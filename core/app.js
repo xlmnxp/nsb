@@ -2,10 +2,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = require("fs");
+var md = require("markdown-it");
 var chalk = require("chalk");
 var path_1 = require("path");
 var ejs_1 = require("ejs");
-var marked = require('markdown-it')().render;
+var marked = new md().render;
 var posts = [];
 var blog = JSON.parse(fs_1.readFileSync(path_1.normalize(__dirname + "/../_config.json"), "utf-8"));
 var blogInfo = function () { return JSON.parse(JSON.stringify(blog)); };
