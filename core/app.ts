@@ -8,8 +8,8 @@ import * as chalk from 'chalk';
 import { normalize } from 'path';
 import { render } from "ejs";
 
-const marked = (markdownText:String)=>{
-    return md().render.bind(md)(markdownText);
+const marked = (markdownText: string)=>{
+    return md().render(markdownText);
 };
 
 var posts:Array<Object> = [];
