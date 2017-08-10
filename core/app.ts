@@ -9,7 +9,7 @@ import { normalize } from 'path';
 import { render } from "ejs";
 
 const marked = (markdownText:String)=>{
-    return new md().render.bind(md,markdownText);
+    return new md().render.bind(md,markdownText)();
 };
 
 var posts:Array<Object> = [];
