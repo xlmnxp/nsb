@@ -6,7 +6,9 @@ var md = require("markdown-it");
 var chalk = require("chalk");
 var path_1 = require("path");
 var ejs_1 = require("ejs");
-var marked = new md().render;
+var marked = function (markdownText) {
+    return new md().render.bind(md, markdownText);
+};
 var posts = [];
 var blog = JSON.parse(fs_1.readFileSync(path_1.normalize(__dirname + "/../_config.json"), "utf-8"));
 var blogInfo = function () { return JSON.parse(JSON.stringify(blog)); };

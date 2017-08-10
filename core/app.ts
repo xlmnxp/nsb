@@ -8,7 +8,9 @@ import * as chalk from 'chalk';
 import { normalize } from 'path';
 import { render } from "ejs";
 
-const marked = new md().render;
+const marked = (markdownText:String)=>{
+    return new md().render.bind(md,markdownText);
+};
 
 var posts:Array<Object> = [];
 var blog:Object = <Object>JSON.parse(readFileSync(normalize(`${__dirname}/../_config.json`),"utf-8"));
