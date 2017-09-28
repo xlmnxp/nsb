@@ -90,51 +90,49 @@ try {
                 return;
             }
             files.forEach(function (file, index) {
-                setTimeout(function () {
-                    fs_1.stat(path_1.normalize(__dirname + "/../mdposts/" + file), function (err, stat) {
+                fs_1.stat(path_1.normalize(__dirname + "/../mdposts/" + file), function (err, stat) {
+                    if (err) {
+                        console.error(err);
+                        return;
+                    }
+                    var created = stat.ctime;
+                    var lastupdate = stat.mtime;
+                    var foldername = created.toDateString().replace(/\s+/g, '-').toLowerCase();
+                    var subject = file.substr(0, file.length - 3);
+                    var filename = subject.replace(/\s+/g, '-').toLowerCase();
+                    var outFile = path_1.normalize(__dirname + "/../out/posts/" + foldername + "/" + filename + ".html");
+                    var context = marked(fs_1.readFileSync(path_1.normalize(__dirname + "/../mdposts/" + file), "utf-8"));
+                    if (!fs_1.existsSync(path_1.normalize(__dirname + "/../out/posts/" + foldername))) {
+                        fs_1.mkdirSync(path_1.normalize(__dirname + "/../out/posts/" + foldername), "0777");
+                    }
+                    posts.push({
+                        subject: subject,
+                        created: created,
+                        lastupdate: lastupdate,
+                        context: context,
+                        link: path_1.normalize("posts/" + foldername + "/" + filename + ".html")
+                    });
+                    fs_1.writeFile(outFile, ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/post.ejs"), 'utf-8'), {
+                        post: {
+                            subject: subject,
+                            created: new Date(created),
+                            lastupdate: new Date(lastupdate),
+                            context: context,
+                            link: path_1.normalize("posts/" + foldername + "/" + filename + ".html")
+                        },
+                        blog: blogInfo()
+                    }, {
+                        filename: path_1.normalize(__dirname + "/../_template/post.ejs")
+                    }), {
+                        encoding: "utf-8"
+                    }, function (err) {
                         if (err) {
                             console.error(err);
                             return;
                         }
-                        var created = stat.ctime;
-                        var lastupdate = stat.mtime;
-                        var foldername = created.toDateString().replace(/\s+/g, '-').toLowerCase();
-                        var subject = file.substr(0, file.length - 3);
-                        var filename = subject.replace(/\s+/g, '-').toLowerCase();
-                        var outFile = path_1.normalize(__dirname + "/../out/posts/" + foldername + "/" + filename + ".html");
-                        var context = marked(fs_1.readFileSync(path_1.normalize(__dirname + "/../mdposts/" + file), "utf-8"), { gfm: true });
-                        if (!fs_1.existsSync(path_1.normalize(__dirname + "/../out/posts/" + foldername))) {
-                            fs_1.mkdirSync(path_1.normalize(__dirname + "/../out/posts/" + foldername), "0777");
-                        }
-                        fs_1.writeFile(outFile, ejs_1.render(fs_1.readFileSync(path_1.normalize(__dirname + "/../_template/post.ejs"), 'utf-8'), {
-                            post: {
-                                subject: subject,
-                                created: new Date(created),
-                                lastupdate: new Date(lastupdate),
-                                context: context,
-                                link: path_1.normalize("posts/" + foldername + "/" + filename + ".html")
-                            },
-                            blog: blogInfo()
-                        }, {
-                            filename: path_1.normalize(__dirname + "/../_template/post.ejs")
-                        }), {
-                            encoding: "utf-8"
-                        }, function (err) {
-                            if (err) {
-                                console.error(err);
-                                return;
-                            }
-                            posts.push({
-                                subject: subject,
-                                created: created,
-                                lastupdate: lastupdate,
-                                context: context,
-                                link: path_1.normalize("posts/" + foldername + "/" + filename + ".html")
-                            });
-                            console.log(chalk.cyan("[info]") + " " + chalk.magenta("\"" + file + "\"") + " " + chalk.blue('converted to') + " " + chalk.magenta("\"" + foldername + "/" + filename + ".html\"") + ".");
-                        });
+                        console.log(chalk.cyan("[info]") + " " + chalk.magenta("\"" + file + "\"") + " " + chalk.blue('converted to') + " " + chalk.magenta("\"" + foldername + "/" + filename + ".html\"") + ".");
                     });
-                }, 100 * index);
+                });
             });
         });
     });

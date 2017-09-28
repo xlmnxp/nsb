@@ -105,7 +105,6 @@ try{
                 return;
             }
             files.forEach((file:string,index: number)=>{
-                setTimeout(()=>{
                     stat(normalize(`${__dirname}/../mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
                         if(err){
                             console.error(err);
@@ -118,11 +117,19 @@ try{
                         var subject = file.substr(0,file.length-3);
                         var filename = subject.replace(/\s+/g,'-').toLowerCase();
                         var outFile = normalize(`${__dirname}/../out/posts/${foldername}/${filename}.html`);
-                        var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"),{gfm:true});
+                        var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"));
                         if(!existsSync(normalize(`${__dirname}/../out/posts/${foldername}`))){
                             mkdirSync(normalize(`${__dirname}/../out/posts/${foldername}`),"0777");
                         }
-                        
+
+                        posts.push({ 
+                            subject: subject,
+                            created: created,
+                            lastupdate: lastupdate,
+                            context: context,
+                            link: normalize(`posts/${foldername}/${filename}.html`)
+                        });
+
                         writeFile(outFile,render(readFileSync(normalize(`${__dirname}/../_template/post.ejs`),'utf-8'),{
                             post:{
                                 subject: subject,
@@ -142,18 +149,9 @@ try{
                                 console.error(err);
                                 return;
                             }
-                            posts.push({ 
-                                subject: subject,
-                                created: created,
-                                lastupdate: lastupdate,
-                                context: context,
-                                link: normalize(`posts/${foldername}/${filename}.html`)
-                            });
-
                             console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"${file}"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"${foldername}/${filename}.html"`)}.`);
                         });
                     });
-                },100*index);
             });
         });
     });
