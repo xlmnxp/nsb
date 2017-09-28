@@ -114,8 +114,8 @@ try{
                         var created = stat.ctime;
                         var lastupdate = stat.mtime;
                         var foldername = created.toDateString().replace(/\s+/g,'-').toLowerCase();
-                        var subject = file.substr(0,file.length-3);
-                        var filename = subject.replace(/\s+/g,'-').toLowerCase();
+                        var subject = file.trim().substr(0,file.length-3);
+                        var filename = subject.trim().replace(/\s+/g,'-').toLowerCase();
                         var outFile = normalize(`${__dirname}/../out/posts/${foldername}/${filename}.html`);
                         var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"));
                         if(!existsSync(normalize(`${__dirname}/../out/posts/${foldername}`))){
@@ -158,58 +158,55 @@ try{
 }catch(e){
     console.error(`${chalk.red(`[error] ${e.message}`)}`);
 }finally{
-    setTimeout(()=>{
+    posts.sort(function(a:any,b:any){
+        return b.created - a.created;
+    });
 
-        posts.sort(function(a:any,b:any){
-            return b.created - a.created;
-        });
+    var totalPages = Math.ceil(posts.length / 12);
 
-        var totalPages = Math.ceil(posts.length / 12);
+    deleteFolderRecursive(normalize(`${__dirname}/../out/page`));
+    mkdir(normalize(`${__dirname}/../out/page`),(err: NodeJS.ErrnoException)=>{
+        if(err){
+            console.error(err);
+            return;
+        }
 
-        deleteFolderRecursive(normalize(`${__dirname}/../out/page`));
-        mkdir(normalize(`${__dirname}/../out/page`),(err: NodeJS.ErrnoException)=>{
+        for (var i = 0; i < totalPages; i++) {
+
+            mkdirSync(normalize(`${__dirname}/../out/page/${i+1}`),"0777")
+            writeFile(normalize(`${__dirname}/../out/page/${i+1}/index.html`),
+                render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
+                    posts: posts.slice(i*12, (i+1) *12),
+                    pages: pagination(posts.length,i+1),
+                    blog: blogInfo(),
+                    pageNumber: i+1
+                },{
+                    filename: normalize(`${__dirname}/../_template/index.ejs`)
+                }),(err: NodeJS.ErrnoException)=>{
+                    if(err){
+                        console.error(err);
+                        return;
+                    }
+                });
+
+                console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"page-${i+1}.html"`)} ${chalk.blue('created')}. `);            
+        }
+    });
+
+    writeFile(normalize(`${__dirname}/../out/index.html`),
+        render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
+            posts: posts.slice(0, 12),
+            pages: pagination(posts.length,1),
+            blog: blogInfo(),
+            pageNumber: 1
+        },{
+            filename: normalize(`${__dirname}/../_template/index.ejs`)
+        }),(err: NodeJS.ErrnoException)=>{
             if(err){
                 console.error(err);
                 return;
             }
 
-            for (var i = 0; i < totalPages; i++) {
-
-                mkdirSync(normalize(`${__dirname}/../out/page/${i+1}`),"0777")
-                writeFile(normalize(`${__dirname}/../out/page/${i+1}/index.html`),
-                    render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
-                        posts: posts.slice(i*12, i+1*12),
-                        pages: pagination(posts.length,i+1),
-                        blog: blogInfo(),
-                        pageNumber: i+1
-                    },{
-                        filename: normalize(`${__dirname}/../_template/index.ejs`)
-                    }),(err: NodeJS.ErrnoException)=>{
-                        if(err){
-                            console.error(err);
-                            return;
-                        }
-                    });
-
-                    console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"page-${i+1}.html"`)} ${chalk.blue('created')}. `);            
-            }
-        });
-
-        writeFile(normalize(`${__dirname}/../out/index.html`),
-            render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
-                posts: posts.slice(0, 12),
-                pages: pagination(posts.length,1),
-                blog: blogInfo(),
-                pageNumber: 1
-            },{
-                filename: normalize(`${__dirname}/../_template/index.ejs`)
-            }),(err: NodeJS.ErrnoException)=>{
-                if(err){
-                    console.error(err);
-                    return;
-                }
-
-                console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
-        });
-    },5000);
+            console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
+    });
 }
