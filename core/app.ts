@@ -90,74 +90,82 @@ function pagination(total: number,page: number): Array<Object>{
         return result;
 }
 
-try{
-    deleteFolderRecursive(normalize(`${__dirname}/../out`));
-    mkdirSync(normalize(`${__dirname}/../out`),"0777");
-    deleteFolderRecursive(normalize(`${__dirname}/../out/posts`));
-    mkdir(normalize(`${__dirname}/../out/posts`),"0777",(err: NodeJS.ErrnoException)=>{
-        if(err){
-            console.error(err);
-            return;
-        }
-        readdir(normalize(`${__dirname}/../mdposts`),(err: NodeJS.ErrnoException, files: string[])=>{
+function writePosts(): Promise<boolean>{
+    return new Promise<boolean>((resolve,reject) => {
+        var itemsProcessed = 0;        
+        deleteFolderRecursive(normalize(`${__dirname}/../out`));
+        mkdirSync(normalize(`${__dirname}/../out`),"0777");
+        deleteFolderRecursive(normalize(`${__dirname}/../out/posts`));
+        mkdir(normalize(`${__dirname}/../out/posts`),"0777",(err: NodeJS.ErrnoException)=>{
             if(err){
-                console.error(err);
+                reject(err);
                 return;
             }
-            files.forEach((file:string,index: number)=>{
-                    stat(normalize(`${__dirname}/../mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
-                        if(err){
-                            console.error(err);
-                            return;
-                        }
-
-                        var created = stat.ctime;
-                        var lastupdate = stat.mtime;
-                        var foldername = created.toDateString().replace(/\s+/g,'-').toLowerCase();
-                        var subject = file.trim().substr(0,file.length-3);
-                        var filename = subject.trim().replace(/\s+/g,'-').toLowerCase();
-                        var outFile = normalize(`${__dirname}/../out/posts/${foldername}/${filename}.html`);
-                        var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"));
-                        if(!existsSync(normalize(`${__dirname}/../out/posts/${foldername}`))){
-                            mkdirSync(normalize(`${__dirname}/../out/posts/${foldername}`),"0777");
-                        }
-
-                        posts.push({ 
-                            subject: subject,
-                            created: created,
-                            lastupdate: lastupdate,
-                            context: context,
-                            link: normalize(`posts/${foldername}/${filename}.html`)
-                        });
-
-                        writeFile(outFile,render(readFileSync(normalize(`${__dirname}/../_template/post.ejs`),'utf-8'),{
-                            post:{
-                                subject: subject,
-                                created: new Date(created),
-                                lastupdate: new Date(lastupdate),
-                                context: context,
-                                link: normalize(`posts/${foldername}/${filename}.html`)
-                            },
-                            blog: blogInfo()
-                        },{
-                            filename: normalize(`${__dirname}/../_template/post.ejs`)
-                        }
-                        ),{
-                            encoding: "utf-8"
-                        },(err: NodeJS.ErrnoException)=>{
+            readdir(normalize(`${__dirname}/../mdposts`),(err: NodeJS.ErrnoException, files: string[])=>{
+                if(err){
+                    reject(err);
+                    return;
+                }
+                files.forEach((file:string,index: number)=>{
+                        stat(normalize(`${__dirname}/../mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
                             if(err){
-                                console.error(err);
+                                reject(err);
                                 return;
                             }
-                            console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"${file}"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"${foldername}/${filename}.html"`)}.`);
+    
+                            var created = stat.ctime;
+                            var lastupdate = stat.mtime;
+                            var foldername = created.toDateString().replace(/\s+/g,'-').toLowerCase();
+                            var subject = file.trim().substr(0,file.length-3);
+                            var filename = subject.trim().replace(/\s+/g,'-').toLowerCase();
+                            var outFile = normalize(`${__dirname}/../out/posts/${foldername}/${filename}.html`);
+                            var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"));
+                            if(!existsSync(normalize(`${__dirname}/../out/posts/${foldername}`))){
+                                mkdirSync(normalize(`${__dirname}/../out/posts/${foldername}`),"0777");
+                            }
+    
+                            posts.push({ 
+                                subject: subject,
+                                created: created,
+                                lastupdate: lastupdate,
+                                context: context,
+                                link: normalize(`posts/${foldername}/${filename}.html`)
+                            });
+    
+                            writeFile(outFile,render(readFileSync(normalize(`${__dirname}/../_template/post.ejs`),'utf-8'),{
+                                post:{
+                                    subject: subject,
+                                    created: created,
+                                    lastupdate: lastupdate,
+                                    context: context,
+                                    link: normalize(`posts/${foldername}/${filename}.html`)
+                                },
+                                blog: blogInfo()
+                            },{
+                                filename: normalize(`${__dirname}/../_template/post.ejs`)
+                            }
+                            ),{
+                                encoding: "utf-8"
+                            },(err: NodeJS.ErrnoException)=>{
+                                if(err){
+                                    reject(err);
+                                    return;
+                                }
+                                itemsProcessed++;
+                                if(itemsProcessed === files.length){
+                                    resolve(true);
+                                }
+                                console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"${file}"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"${foldername}/${filename}.html"`)}.`);
+                            });
                         });
-                    });
+                });
             });
         });
+        
     });
-}catch(e){
-    console.error(`${chalk.red(`[error] ${e.message}`)}`);
-}finally{
+}
+
+writePosts().then((status: boolean) => {
     posts.sort(function(a:any,b:any){
         return b.created - a.created;
     });
@@ -209,4 +217,6 @@ try{
 
             console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
     });
-}
+}).catch(Error => {
+    console.log(`${chalk.red(`[Error] ${Error}`)}.`);    
+});
