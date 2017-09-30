@@ -175,7 +175,7 @@ writePosts().then((status: boolean) => {
     deleteFolderRecursive(normalize(`${__dirname}/../out/page`));
     mkdir(normalize(`${__dirname}/../out/page`),(err: NodeJS.ErrnoException)=>{
         if(err){
-            console.error(err);
+            console.error(`${chalk.red(`[Error] ${err}`)}.`);
             return;
         }
 
@@ -192,7 +192,7 @@ writePosts().then((status: boolean) => {
                     filename: normalize(`${__dirname}/../_template/index.ejs`)
                 }),(err: NodeJS.ErrnoException)=>{
                     if(err){
-                        console.error(err);
+                        console.error(`${chalk.red(`[Error] ${err}`)}.`);
                         return;
                     }
                 });
@@ -211,12 +211,12 @@ writePosts().then((status: boolean) => {
             filename: normalize(`${__dirname}/../_template/index.ejs`)
         }),(err: NodeJS.ErrnoException)=>{
             if(err){
-                console.error(err);
+                console.error(`${chalk.red(`[Error] ${err}`)}.`);
                 return;
             }
 
             console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
     });
 }).catch(Error => {
-    console.log(`${chalk.red(`[Error] ${Error}`)}.`);    
+    console.error(`${chalk.red(`[Error] ${Error}`)}.`);   
 });

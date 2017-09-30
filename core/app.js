@@ -152,7 +152,7 @@ writePosts().then(function (status) {
     deleteFolderRecursive(path_1.normalize(__dirname + "/../out/page"));
     fs_1.mkdir(path_1.normalize(__dirname + "/../out/page"), function (err) {
         if (err) {
-            console.error(err);
+            console.error(chalk.red("[Error] " + err) + ".");
             return;
         }
         for (var i = 0; i < totalPages; i++) {
@@ -166,7 +166,7 @@ writePosts().then(function (status) {
                 filename: path_1.normalize(__dirname + "/../_template/index.ejs")
             }), function (err) {
                 if (err) {
-                    console.error(err);
+                    console.error(chalk.red("[Error] " + err) + ".");
                     return;
                 }
             });
@@ -182,11 +182,11 @@ writePosts().then(function (status) {
         filename: path_1.normalize(__dirname + "/../_template/index.ejs")
     }), function (err) {
         if (err) {
-            console.error(err);
+            console.error(chalk.red("[Error] " + err) + ".");
             return;
         }
         console.log("" + chalk.cyan("[Done] " + chalk.magenta("\"index.ejs\"") + " " + chalk.blue('converted to') + " " + chalk.magenta("\"index.html\"") + "."));
     });
 }).catch(function (Error) {
-    console.log(chalk.red("[Error] " + Error) + ".");
+    console.error(chalk.red("[Error] " + Error) + ".");
 });
