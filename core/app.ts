@@ -13,7 +13,7 @@ const marked = (markdownText: string)=>{
 };
 
 var posts:Array<Object> = [];
-const blogInfo:any = ():Object => JSON.parse(readFileSync(normalize(`${__dirname}/../_config.json`),"utf-8")) as Object;
+const blogInfo:any = ():Object => require(normalize(`${__dirname}/../_config.json`)) as Object;
 
 // حذف المجلد بما يحتويه
 function deleteFolderRecursive(path: string) {
@@ -35,7 +35,6 @@ function deleteFolderRecursive(path: string) {
     rmdirSync(path);
     }
 };
-
 // ازرار التنقل بين الصفحات [ السابق, 1, 2, 3 , التالي]ـ
 function pagination(total: number,page: number): Array<Object>{
         var result:Array<Object> = [];
