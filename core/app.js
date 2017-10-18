@@ -10,7 +10,7 @@ var marked = function (markdownText) {
     return md().render(markdownText);
 };
 var posts = [];
-var blogInfo = function () { return JSON.parse(fs_1.readFileSync(path_1.normalize(__dirname + "/../_config.json"), "utf-8")); };
+var blogInfo = function () { return require(path_1.normalize(__dirname + "/../_config.json")); };
 // حذف المجلد بما يحتويه
 function deleteFolderRecursive(path) {
     // التحقق من هل المسار صحيح
