@@ -13,7 +13,13 @@ const marked = (markdownText: string)=>{
 };
 
 var posts:Array<Object> = [];
-const blogInfo:any = ():Object => require(normalize(`${__dirname}/../_config.json`)) as Object;
+var folder_path:() => String = () => __dirname;
+const blogInfo:any = ():Object => require(normalize(`${folder_path()}/../_config.json`)) as Object;
+
+if(!existsSync(`${folder_path()}/../_config.json`)){
+    console.error(`${chalk.red(`[Error] '_config.json' cannot be found file in the folder`)}.`);
+    process.exit(1);
+}
 
 // حذف المجلد بما يحتويه
 function deleteFolderRecursive(path: string) {
@@ -100,27 +106,27 @@ function writePosts(): Promise<boolean>{
     return new Promise<boolean>((resolve,reject) => {
         var itemsProcessed = 0;
         // حذف المجلد "out" و المجلد "posts"
-        deleteFolderRecursive(normalize(`${__dirname}/../out`));
-        deleteFolderRecursive(normalize(`${__dirname}/../out/posts`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../out`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../out/posts`));
         
         // إنشاء المجلد الرائيسية "out" بصلاحية 777
-        mkdirSync(normalize(`${__dirname}/../out`),"0777");
+        mkdirSync(normalize(`${folder_path()}/../out`),"0777");
         
         // انشاء المجلد "posts"
-        mkdir(normalize(`${__dirname}/../out/posts`),"0777",(err: NodeJS.ErrnoException)=>{
+        mkdir(normalize(`${folder_path()}/../out/posts`),"0777",(err: NodeJS.ErrnoException)=>{
             if(err){
                 reject(err);
                 return;
             }
             // قراءة محتوى المجلد "mdposts"
-            readdir(normalize(`${__dirname}/../mdposts`),(err: NodeJS.ErrnoException, files: string[])=>{
+            readdir(normalize(`${folder_path()}/../mdposts`),(err: NodeJS.ErrnoException, files: string[])=>{
                 if(err){
                     reject(err);
                     return;
                 }
                 files.forEach((file:string,index: number)=>{
                         // جلب حالة المجلد
-                        stat(normalize(`${__dirname}/../mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
+                        stat(normalize(`${folder_path()}/../mdposts/${file}`),(err: NodeJS.ErrnoException,stat: Stats)=>{
                             if(err){
                                 reject(err);
                                 return;
@@ -137,13 +143,13 @@ function writePosts(): Promise<boolean>{
                             // تحويل عنوان المقال الى ملف
                             var filename = subject.trim().replace(/\s+/g,'-').toLowerCase();
                             // رسم مسار إستخراج الملف
-                            var outFile = normalize(`${__dirname}/../out/posts/${foldername}/${filename}.html`);
+                            var outFile = normalize(`${folder_path()}/../out/posts/${foldername}/${filename}.html`);
                             // قراءة محتوى المقال وترجمته من md الى html
-                            var context = marked(readFileSync(normalize(`${__dirname}/../mdposts/${file}`),"utf-8"));
+                            var context = marked(readFileSync(normalize(`${folder_path()}/../mdposts/${file}`),"utf-8"));
                             // التأكد اذا كان مجلد تاريخ المقال غير موجود
-                            if(!existsSync(normalize(`${__dirname}/../out/posts/${foldername}`))){
+                            if(!existsSync(normalize(`${folder_path()}/../out/posts/${foldername}`))){
                                 // قم بإنشاء مجلد تاريخ المقال
-                                mkdirSync(normalize(`${__dirname}/../out/posts/${foldername}`),"0777");
+                                mkdirSync(normalize(`${folder_path()}/../out/posts/${foldername}`),"0777");
                             }
                             
                             // إضافة المقال الى المقالات
@@ -156,7 +162,7 @@ function writePosts(): Promise<boolean>{
                             });
     
                             // كتابة ملف المقال
-                            writeFile(outFile,render(readFileSync(normalize(`${__dirname}/../_template/post.ejs`),'utf-8'),{
+                            writeFile(outFile,render(readFileSync(normalize(`${folder_path()}/../_template/post.ejs`),'utf-8'),{
                                 post:{
                                     subject: subject,
                                     created: created,
@@ -166,7 +172,7 @@ function writePosts(): Promise<boolean>{
                                 },
                                 blog: blogInfo()
                             },{
-                                filename: normalize(`${__dirname}/../_template/post.ejs`)
+                                filename: normalize(`${folder_path()}/../_template/post.ejs`)
                             }
                             ),{
                                 encoding: "utf-8"
@@ -203,10 +209,10 @@ writePosts().then((status: boolean) => {
     var totalPages = Math.ceil(posts.length / blogInfo().pagination.resultsPerPage);
 
     // حذف المجلد "out/page" بكامل محتواة
-    deleteFolderRecursive(normalize(`${__dirname}/../out/page`));
+    deleteFolderRecursive(normalize(`${folder_path()}/../out/page`));
     
     // انشاء المجلد "out/page"
-    mkdir(normalize(`${__dirname}/../out/page`),(err: NodeJS.ErrnoException)=>{
+    mkdir(normalize(`${folder_path()}/../out/page`),(err: NodeJS.ErrnoException)=>{
         if(err){
             console.error(`${chalk.red(`[Error] ${err}`)}.`);
             return;
@@ -214,18 +220,18 @@ writePosts().then((status: boolean) => {
 
         for (var i = 0; i < totalPages; i++) {
             // إنشاء الصفحة
-            mkdirSync(normalize(`${__dirname}/../out/page/${i+1}`),"0777");
+            mkdirSync(normalize(`${folder_path()}/../out/page/${i+1}`),"0777");
 
             // انشاء الصفحة بمحتواها
-            writeFile(normalize(`${__dirname}/../out/page/${i+1}/index.html`),
+            writeFile(normalize(`${folder_path()}/../out/page/${i+1}/index.html`),
                 // قراءة محتوى القالب index وترجمته الى html
-                render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
+                render(readFileSync(normalize(`${folder_path()}/../_template/index.ejs`),'utf-8'),{
                     posts: posts.slice(i* blogInfo().pagination.resultsPerPage, (i+1) * blogInfo().pagination.resultsPerPage),
                     pages: pagination(posts.length, i+1),
                     blog: blogInfo(),
                     pageNumber: i+1
                 },{
-                    filename: normalize(`${__dirname}/../_template/index.ejs`)
+                    filename: normalize(`${folder_path()}/../_template/index.ejs`)
                 }),(err: NodeJS.ErrnoException)=>{
                     if(err){
                         console.error(`${chalk.red(`[Error] ${err}`)}.`);
@@ -238,15 +244,15 @@ writePosts().then((status: boolean) => {
     });
 
     // انشاء مجلد الصفحة الرائيسية
-    writeFile(normalize(`${__dirname}/../out/index.html`),
-        render(readFileSync(normalize(`${__dirname}/../_template/index.ejs`),'utf-8'),{
+    writeFile(normalize(`${folder_path()}/../out/index.html`),
+        render(readFileSync(normalize(`${folder_path()}/../_template/index.ejs`),'utf-8'),{
             // اقتصاص عدد المقالات للصفحة الواحدة
             posts: posts.slice(0, blogInfo().pagination.resultsPerPage),
             pages: pagination(posts.length,1),
             blog: blogInfo(),
             pageNumber: 1
         },{
-            filename: normalize(`${__dirname}/../_template/index.ejs`)
+            filename: normalize(`${folder_path()}/../_template/index.ejs`)
         }),(err: NodeJS.ErrnoException)=>{
             if(err){
                 console.error(`${chalk.red(`[Error] ${err}`)}.`);
@@ -256,5 +262,6 @@ writePosts().then((status: boolean) => {
             console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
     });
 }).catch(Error => {
-    console.error(`${chalk.red(`[Error] ${Error}`)}.`);   
+    console.error(`${chalk.red(`[Error] ${Error}`)}.`);
+    process.exit(1);    
 });
