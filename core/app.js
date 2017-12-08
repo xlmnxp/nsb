@@ -39,7 +39,6 @@ var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
 var fs_1 = require("fs");
 var md = require("markdown-it");
-var Chalk_1 = require("Chalk");
 var path_1 = require("path");
 var ejs_1 = require("ejs");
 var marked = function (markdownText) {
@@ -49,7 +48,7 @@ var posts = [];
 var folder_path = function () { return __dirname; };
 var blogInfo = function () { return require(path_1.normalize(folder_path() + "/../_config.json")); };
 if (!fs_1.existsSync(folder_path() + "/../_config.json")) {
-    console.error(Chalk_1.Chalk.red("[Error] '_config.json' cannot be found file in the folder") + ".");
+    console.error(Chalk.red("[Error] '_config.json' cannot be found file in the folder") + ".");
     process.exit(1);
 }
 // حذف المجلد بما يحتويه
@@ -204,7 +203,7 @@ function writePosts() {
                                 // إرجاع صحيح
                                 resolve(true);
                             }
-                            console.log(Chalk_1.Chalk.cyan("[info]") + " " + Chalk_1.Chalk.magenta("\"" + file + "\"") + " " + Chalk_1.Chalk.blue('converted to') + " " + Chalk_1.Chalk.magenta("\"" + foldername + "/" + filename + ".html\"") + ".");
+                            console.log(Chalk.cyan("[info]") + " " + Chalk.magenta("\"" + file + "\"") + " " + Chalk.blue('converted to') + " " + Chalk.magenta("\"" + foldername + "/" + filename + ".html\"") + ".");
                         });
                     });
                 });
@@ -231,7 +230,7 @@ function writePosts() {
                 // انشاء المجلد "out/page"
                 fs_1.mkdir(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/page"), function (err) {
                     if (err) {
-                        console.error(Chalk_1.Chalk.red("[Error] " + err) + ".");
+                        console.error(Chalk.red("[Error] " + err) + ".");
                         return;
                     }
                     for (var i = 0; i < totalPages; i++) {
@@ -249,11 +248,11 @@ function writePosts() {
                             filename: path_1.normalize(folder_path() + "/../_template/index.ejs")
                         }), function (err) {
                             if (err) {
-                                console.error(Chalk_1.Chalk.red("[Error] " + err) + ".");
+                                console.error(Chalk.red("[Error] " + err) + ".");
                                 return;
                             }
                         });
-                        console.log(Chalk_1.Chalk.cyan("[info]") + " " + Chalk_1.Chalk.magenta("\"page-" + (i + 1) + ".html\"") + " " + Chalk_1.Chalk.blue('created') + ". ");
+                        console.log(Chalk.cyan("[info]") + " " + Chalk.magenta("\"page-" + (i + 1) + ".html\"") + " " + Chalk.blue('created') + ". ");
                     }
                 });
                 // انشاء مجلد الصفحة الرائيسية
@@ -267,15 +266,15 @@ function writePosts() {
                     filename: path_1.normalize(folder_path() + "/../_template/index.ejs")
                 }), function (err) {
                     if (err) {
-                        console.error(Chalk_1.Chalk.red("[Error] " + err) + ".");
+                        console.error(Chalk.red("[Error] " + err) + ".");
                         return;
                     }
-                    console.log("" + Chalk_1.Chalk.cyan("[Done] " + Chalk_1.Chalk.magenta("\"index.ejs\"") + " " + Chalk_1.Chalk.blue('converted to') + " " + Chalk_1.Chalk.magenta("\"index.html\"") + "."));
+                    console.log("" + Chalk.cyan("[Done] " + Chalk.magenta("\"index.ejs\"") + " " + Chalk.blue('converted to') + " " + Chalk.magenta("\"index.html\"") + "."));
                 });
                 return [3 /*break*/, 3];
             case 2:
                 error_1 = _a.sent();
-                console.error(Chalk_1.Chalk.red("[Error] " + error_1) + ".");
+                console.error(Chalk.red("[Error] " + error_1) + ".");
                 process.exit(1);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];

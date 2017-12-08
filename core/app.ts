@@ -4,7 +4,7 @@ import { readFile, readdirSync, readFileSync, existsSync,
          readdir,stat, Stats } from 'fs';
 
 import * as md from 'markdown-it';
-import { Chalk } from 'Chalk';
+import { Chalk } from 'chalk';
 import { normalize } from 'path';
 import { render } from "ejs";
 
