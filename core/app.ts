@@ -4,7 +4,7 @@ import { readFile, readdirSync, readFileSync, existsSync,
          readdir,stat, Stats } from 'fs';
 
 import * as md from 'markdown-it';
-import * as chalk from 'chalk';
+import { Chalk } from 'Chalk';
 import { normalize } from 'path';
 import { render } from "ejs";
 
@@ -17,7 +17,7 @@ var folder_path:() => String = () => __dirname;
 const blogInfo:any = ():Object => require(normalize(`${folder_path()}/../_config.json`)) as Object;
 
 if(!existsSync(`${folder_path()}/../_config.json`)){
-    console.error(`${chalk.default.red(`[Error] '_config.json' cannot be found file in the folder`)}.`);
+    console.error(`${Chalk.red(`[Error] '_config.json' cannot be found file in the folder`)}.`);
     process.exit(1);
 }
 
@@ -101,19 +101,19 @@ function pagination(total: number,page: number): Array<Object>{
         return result;
 }
 
-// كتابة المقالات داخل مجلد "out/posts"
+// كتابة المقالات داخل مجلد "{ مجلد المستخراجات }/posts"
 function writePosts(): Promise<boolean>{
     return new Promise<boolean>((resolve,reject) => {
         var itemsProcessed = 0;
         // حذف المجلد "out" و المجلد "posts"
-        deleteFolderRecursive(normalize(`${folder_path()}/../out`));
-        deleteFolderRecursive(normalize(`${folder_path()}/../out/posts`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo.output_folder}`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts`));
         
         // إنشاء المجلد الرائيسية "out" بصلاحية 777
-        mkdirSync(normalize(`${folder_path()}/../out`),"0777");
+        mkdirSync(normalize(`${folder_path()}/../${blogInfo.output_folder}`),"0777");
         
         // انشاء المجلد "posts"
-        mkdir(normalize(`${folder_path()}/../out/posts`),"0777",(err: NodeJS.ErrnoException)=>{
+        mkdir(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts`),"0777",(err: NodeJS.ErrnoException)=>{
             if(err){
                 reject(err);
                 return;
@@ -143,13 +143,13 @@ function writePosts(): Promise<boolean>{
                             // تحويل عنوان المقال الى ملف
                             var filename = subject.trim().replace(/\s+/g,'-').toLowerCase();
                             // رسم مسار إستخراج الملف
-                            var outFile = normalize(`${folder_path()}/../out/posts/${foldername}/${filename}.html`);
+                            var outFile = normalize(`${folder_path()}/../${blogInfo.output_folder}/posts/${foldername}/${filename}.html`);
                             // قراءة محتوى المقال وترجمته من md الى html
                             var context = marked(readFileSync(normalize(`${folder_path()}/../mdposts/${file}`),"utf-8"));
                             // التأكد اذا كان مجلد تاريخ المقال غير موجود
-                            if(!existsSync(normalize(`${folder_path()}/../out/posts/${foldername}`))){
+                            if(!existsSync(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts/${foldername}`))){
                                 // قم بإنشاء مجلد تاريخ المقال
-                                mkdirSync(normalize(`${folder_path()}/../out/posts/${foldername}`),"0777");
+                                mkdirSync(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts/${foldername}`),"0777");
                             }
                             
                             // إضافة المقال الى المقالات
@@ -188,7 +188,7 @@ function writePosts(): Promise<boolean>{
                                     // إرجاع صحيح
                                     resolve(true);
                                 }
-                                console.log(`${chalk.default.cyan(`[info]`)} ${chalk.default.magenta(`"${file}"`)} ${chalk.default.blue('converted to')} ${chalk.default.magenta(`"${foldername}/${filename}.html"`)}.`);
+                                console.log(`${Chalk.cyan(`[info]`)} ${Chalk.magenta(`"${file}"`)} ${Chalk.blue('converted to')} ${Chalk.magenta(`"${foldername}/${filename}.html"`)}.`);
                             });
                         });
                 });
@@ -212,21 +212,21 @@ function writePosts(): Promise<boolean>{
         var totalPages = Math.ceil(posts.length / blogInfo().pagination.resultsPerPage);
     
         // حذف المجلد "out/page" بكامل محتواة
-        deleteFolderRecursive(normalize(`${folder_path()}/../out/page`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo.output_folder}/page`));
         
         // انشاء المجلد "out/page"
-        mkdir(normalize(`${folder_path()}/../out/page`),(err: NodeJS.ErrnoException)=>{
+        mkdir(normalize(`${folder_path()}/../${blogInfo.output_folder}/page`),(err: NodeJS.ErrnoException)=>{
             if(err){
-                console.error(`${chalk.default.red(`[Error] ${err}`)}.`);
+                console.error(`${Chalk.red(`[Error] ${err}`)}.`);
                 return;
             }
     
             for (var i = 0; i < totalPages; i++) {
                 // إنشاء الصفحة
-                mkdirSync(normalize(`${folder_path()}/../out/page/${i+1}`),"0777");
+                mkdirSync(normalize(`${folder_path()}/../${blogInfo.output_folder}/page/${i+1}`),"0777");
     
                 // انشاء الصفحة بمحتواها
-                writeFile(normalize(`${folder_path()}/../out/page/${i+1}/index.html`),
+                writeFile(normalize(`${folder_path()}/../${blogInfo.output_folder}/page/${i+1}/index.html`),
                     // قراءة محتوى القالب index وترجمته الى html
                     render(readFileSync(normalize(`${folder_path()}/../_template/index.ejs`),'utf-8'),{
                         posts: posts.slice(i* blogInfo().pagination.resultsPerPage, (i+1) * blogInfo().pagination.resultsPerPage),
@@ -237,17 +237,17 @@ function writePosts(): Promise<boolean>{
                         filename: normalize(`${folder_path()}/../_template/index.ejs`)
                     }),(err: NodeJS.ErrnoException)=>{
                         if(err){
-                            console.error(`${chalk.default.red(`[Error] ${err}`)}.`);
+                            console.error(`${Chalk.red(`[Error] ${err}`)}.`);
                             return;
                         }
                     });
     
-                    console.log(`${chalk.default.cyan(`[info]`)} ${chalk.default.magenta(`"page-${i+1}.html"`)} ${chalk.default.blue('created')}. `);            
+                    console.log(`${Chalk.cyan(`[info]`)} ${Chalk.magenta(`"page-${i+1}.html"`)} ${Chalk.blue('created')}. `);            
             }
         });
     
         // انشاء مجلد الصفحة الرائيسية
-        writeFile(normalize(`${folder_path()}/../out/index.html`),
+        writeFile(normalize(`${folder_path()}/../${blogInfo.output_folder}/index.html`),
             render(readFileSync(normalize(`${folder_path()}/../_template/index.ejs`),'utf-8'),{
                 // اقتصاص عدد المقالات للصفحة الواحدة
                 posts: posts.slice(0, blogInfo().pagination.resultsPerPage),
@@ -258,14 +258,14 @@ function writePosts(): Promise<boolean>{
                 filename: normalize(`${folder_path()}/../_template/index.ejs`)
             }),(err: NodeJS.ErrnoException)=>{
                 if(err){
-                    console.error(`${chalk.default.red(`[Error] ${err}`)}.`);
+                    console.error(`${Chalk.red(`[Error] ${err}`)}.`);
                     return;
                 }
     
-                console.log(`${chalk.default.cyan(`[Done] ${chalk.default.magenta(`"index.ejs"`)} ${chalk.default.blue('converted to')} ${chalk.default.magenta(`"index.html"`)}.`)}`);    
+                console.log(`${Chalk.cyan(`[Done] ${Chalk.magenta(`"index.ejs"`)} ${Chalk.blue('converted to')} ${Chalk.magenta(`"index.html"`)}.`)}`);    
         });
     }catch(error){
-        console.error(`${chalk.default.red(`[Error] ${error}`)}.`);
+        console.error(`${Chalk.red(`[Error] ${error}`)}.`);
         process.exit(1);   
     }
 })();

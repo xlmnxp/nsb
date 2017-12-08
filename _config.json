@@ -5,6 +5,7 @@
     "url": "https://runbb.github.io/nsb",
     "charset": "utf-8",
     "description": "مدونة عملية جدًا",
+    "output_folder": "out",
     "pagination":{
         "previous": "السابق",
         "size": 8,
