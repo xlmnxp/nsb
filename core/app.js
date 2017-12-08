@@ -128,12 +128,12 @@ function writePosts() {
     return new Promise(function (resolve, reject) {
         var itemsProcessed = 0;
         // حذف المجلد "out" و المجلد "posts"
-        deleteFolderRecursive(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder));
-        deleteFolderRecursive(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/posts"));
+        deleteFolderRecursive(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder));
+        deleteFolderRecursive(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/posts"));
         // إنشاء المجلد الرائيسية "out" بصلاحية 777
-        fs_1.mkdirSync(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder), "0777");
+        fs_1.mkdirSync(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder), "0777");
         // انشاء المجلد "posts"
-        fs_1.mkdir(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/posts"), "0777", function (err) {
+        fs_1.mkdir(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/posts"), "0777", function (err) {
             if (err) {
                 reject(err);
                 return;
@@ -162,13 +162,13 @@ function writePosts() {
                         // تحويل عنوان المقال الى ملف
                         var filename = subject.trim().replace(/\s+/g, '-').toLowerCase();
                         // رسم مسار إستخراج الملف
-                        var outFile = path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/posts/" + foldername + "/" + filename + ".html");
+                        var outFile = path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/posts/" + foldername + "/" + filename + ".html");
                         // قراءة محتوى المقال وترجمته من md الى html
                         var context = marked(fs_1.readFileSync(path_1.normalize(folder_path() + "/../mdposts/" + file), "utf-8"));
                         // التأكد اذا كان مجلد تاريخ المقال غير موجود
-                        if (!fs_1.existsSync(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/posts/" + foldername))) {
+                        if (!fs_1.existsSync(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/posts/" + foldername))) {
                             // قم بإنشاء مجلد تاريخ المقال
-                            fs_1.mkdirSync(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/posts/" + foldername), "0777");
+                            fs_1.mkdirSync(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/posts/" + foldername), "0777");
                         }
                         // إضافة المقال الى المقالات
                         posts.push({
@@ -227,18 +227,18 @@ function writePosts() {
                 });
                 totalPages = Math.ceil(posts.length / blogInfo().pagination.resultsPerPage);
                 // حذف المجلد "out/page" بكامل محتواة
-                deleteFolderRecursive(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/page"));
+                deleteFolderRecursive(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/page"));
                 // انشاء المجلد "out/page"
-                fs_1.mkdir(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/page"), function (err) {
+                fs_1.mkdir(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/page"), function (err) {
                     if (err) {
                         console.error(chalk_1.default.red("[Error] " + err) + ".");
                         return;
                     }
                     for (var i = 0; i < totalPages; i++) {
                         // إنشاء الصفحة
-                        fs_1.mkdirSync(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/page/" + (i + 1)), "0777");
+                        fs_1.mkdirSync(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/page/" + (i + 1)), "0777");
                         // انشاء الصفحة بمحتواها
-                        fs_1.writeFile(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/page/" + (i + 1) + "/index.html"), 
+                        fs_1.writeFile(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/page/" + (i + 1) + "/index.html"), 
                         // قراءة محتوى القالب index وترجمته الى html
                         ejs_1.render(fs_1.readFileSync(path_1.normalize(folder_path() + "/../_template/index.ejs"), 'utf-8'), {
                             posts: posts.slice(i * blogInfo().pagination.resultsPerPage, (i + 1) * blogInfo().pagination.resultsPerPage),
@@ -257,7 +257,7 @@ function writePosts() {
                     }
                 });
                 // انشاء مجلد الصفحة الرائيسية
-                fs_1.writeFile(path_1.normalize(folder_path() + "/../" + blogInfo.output_folder + "/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(folder_path() + "/../_template/index.ejs"), 'utf-8'), {
+                fs_1.writeFile(path_1.normalize(folder_path() + "/../" + blogInfo().output_folder + "/index.html"), ejs_1.render(fs_1.readFileSync(path_1.normalize(folder_path() + "/../_template/index.ejs"), 'utf-8'), {
                     // اقتصاص عدد المقالات للصفحة الواحدة
                     posts: posts.slice(0, blogInfo().pagination.resultsPerPage),
                     pages: pagination(posts.length, 1),

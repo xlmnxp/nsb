@@ -104,14 +104,14 @@ function writePosts(): Promise<boolean>{
     return new Promise<boolean>((resolve,reject) => {
         var itemsProcessed = 0;
         // حذف المجلد "out" و المجلد "posts"
-        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo.output_folder}`));
-        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo().output_folder}`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo().output_folder}/posts`));
         
         // إنشاء المجلد الرائيسية "out" بصلاحية 777
-        mkdirSync(normalize(`${folder_path()}/../${blogInfo.output_folder}`),"0777");
+        mkdirSync(normalize(`${folder_path()}/../${blogInfo().output_folder}`),"0777");
         
         // انشاء المجلد "posts"
-        mkdir(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts`),"0777",(err: NodeJS.ErrnoException)=>{
+        mkdir(normalize(`${folder_path()}/../${blogInfo().output_folder}/posts`),"0777",(err: NodeJS.ErrnoException)=>{
             if(err){
                 reject(err);
                 return;
@@ -141,13 +141,13 @@ function writePosts(): Promise<boolean>{
                             // تحويل عنوان المقال الى ملف
                             var filename = subject.trim().replace(/\s+/g,'-').toLowerCase();
                             // رسم مسار إستخراج الملف
-                            var outFile = normalize(`${folder_path()}/../${blogInfo.output_folder}/posts/${foldername}/${filename}.html`);
+                            var outFile = normalize(`${folder_path()}/../${blogInfo().output_folder}/posts/${foldername}/${filename}.html`);
                             // قراءة محتوى المقال وترجمته من md الى html
                             var context = marked(readFileSync(normalize(`${folder_path()}/../mdposts/${file}`),"utf-8"));
                             // التأكد اذا كان مجلد تاريخ المقال غير موجود
-                            if(!existsSync(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts/${foldername}`))){
+                            if(!existsSync(normalize(`${folder_path()}/../${blogInfo().output_folder}/posts/${foldername}`))){
                                 // قم بإنشاء مجلد تاريخ المقال
-                                mkdirSync(normalize(`${folder_path()}/../${blogInfo.output_folder}/posts/${foldername}`),"0777");
+                                mkdirSync(normalize(`${folder_path()}/../${blogInfo().output_folder}/posts/${foldername}`),"0777");
                             }
                             
                             // إضافة المقال الى المقالات
@@ -210,10 +210,10 @@ function writePosts(): Promise<boolean>{
         var totalPages = Math.ceil(posts.length / blogInfo().pagination.resultsPerPage);
     
         // حذف المجلد "out/page" بكامل محتواة
-        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo.output_folder}/page`));
+        deleteFolderRecursive(normalize(`${folder_path()}/../${blogInfo().output_folder}/page`));
         
         // انشاء المجلد "out/page"
-        mkdir(normalize(`${folder_path()}/../${blogInfo.output_folder}/page`),(err: NodeJS.ErrnoException)=>{
+        mkdir(normalize(`${folder_path()}/../${blogInfo().output_folder}/page`),(err: NodeJS.ErrnoException)=>{
             if(err){
                 console.error(`${chalk.red(`[Error] ${err}`)}.`);
                 return;
@@ -221,10 +221,10 @@ function writePosts(): Promise<boolean>{
     
             for (var i = 0; i < totalPages; i++) {
                 // إنشاء الصفحة
-                mkdirSync(normalize(`${folder_path()}/../${blogInfo.output_folder}/page/${i+1}`),"0777");
+                mkdirSync(normalize(`${folder_path()}/../${blogInfo().output_folder}/page/${i+1}`),"0777");
     
                 // انشاء الصفحة بمحتواها
-                writeFile(normalize(`${folder_path()}/../${blogInfo.output_folder}/page/${i+1}/index.html`),
+                writeFile(normalize(`${folder_path()}/../${blogInfo().output_folder}/page/${i+1}/index.html`),
                     // قراءة محتوى القالب index وترجمته الى html
                     render(readFileSync(normalize(`${folder_path()}/../_template/index.ejs`),'utf-8'),{
                         posts: posts.slice(i* blogInfo().pagination.resultsPerPage, (i+1) * blogInfo().pagination.resultsPerPage),
@@ -245,7 +245,7 @@ function writePosts(): Promise<boolean>{
         });
     
         // انشاء مجلد الصفحة الرائيسية
-        writeFile(normalize(`${folder_path()}/../${blogInfo.output_folder}/index.html`),
+        writeFile(normalize(`${folder_path()}/../${blogInfo().output_folder}/index.html`),
             render(readFileSync(normalize(`${folder_path()}/../_template/index.ejs`),'utf-8'),{
                 // اقتصاص عدد المقالات للصفحة الواحدة
                 posts: posts.slice(0, blogInfo().pagination.resultsPerPage),
