@@ -4,20 +4,18 @@ import { readFile, readdirSync, readFileSync, existsSync,
          readdir,stat, Stats } from 'fs';
 
 import * as md from 'markdown-it';
-import { Chalk } from 'chalk';
+import chalk from 'chalk';
 import { normalize } from 'path';
 import { render } from "ejs";
-
 const marked = (markdownText: string)=>{
     return md().render(markdownText);
 };
-
 var posts:Array<Object> = [];
 var folder_path:() => String = () => __dirname;
 const blogInfo:any = ():Object => require(normalize(`${folder_path()}/../_config.json`)) as Object;
 
 if(!existsSync(`${folder_path()}/../_config.json`)){
-    console.error(`${Chalk.red(`[Error] '_config.json' cannot be found file in the folder`)}.`);
+    console.error(`${chalk.red(`[Error] '_config.json' cannot be found file in the folder`)}.`);
     process.exit(1);
 }
 
@@ -188,7 +186,7 @@ function writePosts(): Promise<boolean>{
                                     // إرجاع صحيح
                                     resolve(true);
                                 }
-                                console.log(`${Chalk.cyan(`[info]`)} ${Chalk.magenta(`"${file}"`)} ${Chalk.blue('converted to')} ${Chalk.magenta(`"${foldername}/${filename}.html"`)}.`);
+                                console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"${file}"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"${foldername}/${filename}.html"`)}.`);
                             });
                         });
                 });
@@ -217,7 +215,7 @@ function writePosts(): Promise<boolean>{
         // انشاء المجلد "out/page"
         mkdir(normalize(`${folder_path()}/../${blogInfo.output_folder}/page`),(err: NodeJS.ErrnoException)=>{
             if(err){
-                console.error(`${Chalk.red(`[Error] ${err}`)}.`);
+                console.error(`${chalk.red(`[Error] ${err}`)}.`);
                 return;
             }
     
@@ -237,12 +235,12 @@ function writePosts(): Promise<boolean>{
                         filename: normalize(`${folder_path()}/../_template/index.ejs`)
                     }),(err: NodeJS.ErrnoException)=>{
                         if(err){
-                            console.error(`${Chalk.red(`[Error] ${err}`)}.`);
+                            console.error(`${chalk.red(`[Error] ${err}`)}.`);
                             return;
                         }
                     });
     
-                    console.log(`${Chalk.cyan(`[info]`)} ${Chalk.magenta(`"page-${i+1}.html"`)} ${Chalk.blue('created')}. `);            
+                    console.log(`${chalk.cyan(`[info]`)} ${chalk.magenta(`"page-${i+1}.html"`)} ${chalk.blue('created')}. `);            
             }
         });
     
@@ -258,14 +256,14 @@ function writePosts(): Promise<boolean>{
                 filename: normalize(`${folder_path()}/../_template/index.ejs`)
             }),(err: NodeJS.ErrnoException)=>{
                 if(err){
-                    console.error(`${Chalk.red(`[Error] ${err}`)}.`);
+                    console.error(`${chalk.red(`[Error] ${err}`)}.`);
                     return;
                 }
     
-                console.log(`${Chalk.cyan(`[Done] ${Chalk.magenta(`"index.ejs"`)} ${Chalk.blue('converted to')} ${Chalk.magenta(`"index.html"`)}.`)}`);    
+                console.log(`${chalk.cyan(`[Done] ${chalk.magenta(`"index.ejs"`)} ${chalk.blue('converted to')} ${chalk.magenta(`"index.html"`)}.`)}`);    
         });
     }catch(error){
-        console.error(`${Chalk.red(`[Error] ${error}`)}.`);
+        console.error(`${chalk.red(`[Error] ${error}`)}.`);
         process.exit(1);   
     }
 })();
