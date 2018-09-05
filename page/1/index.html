@@ -1,0 +1,140 @@
+<html>
+<head>
+    <!-- HEAD SECTION -->
+
+    <!-- IE Edge Meta Tag -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <!-- Optional Theme -->
+    <!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"-->
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/paper/bootstrap.min.css" rel="stylesheet" integrity="sha384-awusxf8AUojygHf2+joICySzB780jVvQaVCAt1clU3QsyAitLGul28Qxb2r1e5g+" crossorigin="anonymous">
+    
+    <!-- Optional IE8 Support -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+    <!-- FOOTER SECTION - Before closing </body> tag -->
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+    <!-- Minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- highlightjs -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/isagalaev/highlight.js/master/src/styles/vs.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+    
+    <!-- rtl bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-flipped.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css" />
+    <style>
+        pre{
+            direction: ltr !important;
+        }
+    </style>
+    
+
+    <!-- momentjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+    <script>
+        moment.locale('ar');
+    </script>
+    <title>مدونة تجريبية - الصفحة 1</title>
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+    <div class="container">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="https://xlmnxp.github.io/nsb/index.html">مدونة تجريبية</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+        <li class="active"><a href="https://xlmnxp.github.io/nsb/index.html">الرائيسية</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        </ul>
+    </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<div class="container">
+
+
+
+
+    <h3><a href="https://xlmnxp.github.io/nsb/posts/wed-sep-05-2018/طريقة-التركيب.html">طريقة التركيب</a></h3>
+    <p><script>document.write(moment('Wed Sep 05 2018 14:54:22 GMT+0000 (Coordinated Universal Time)').fromNow());</script></p>
+    <div class="post">
+        <h2>طريقة التركيب</h2>
+<p>تقوم بنسخ المستودع لجهازك</p>
+<pre><code class="language-sh">$ git clone https://github.com/runbb/nsb.git
+$ cd nsb
+$ [sudo] npm install
+</code></pre>
+<p>وتقوم بتعديل ملف <code>_config.json</code></p>
+<pre><code class="language-json">{
+    &quot;rtl&quot;: true,
+    &quot;locale&quot;: &quot;ar&quot;,
+    &quot;title&quot;: &quot;اسم المدونة&quot;,
+    &quot;url&quot;: &quot;الرابط للصفحة الرائيسية من دون '/' في الاحير&quot;,
+    &quot;charset&quot;: &quot;ترميز المدونة&quot;, 
+    &quot;description&quot;: &quot;وصف المدونة&quot;,
+    &quot;pagination&quot;:{
+        &quot;previous&quot;: &quot;زر الصفحة السابقة&quot;,
+        &quot;size&quot;: &quot;عدد ازرار الارقام التي تظهر في شريط التقل بين الصفحات&quot;,
+        &quot;resultsPerPage&quot;: &quot;عدد التدوينات في الصفحة&quot;, 
+        &quot;next&quot;: &quot;زر الصفحة التالي&quot;    
+    }
+}
+</code></pre>
+<h2>إضافة مقال</h2>
+<p>تقوم بإضافة المقالات لمجلد <code>mdposts</code>
+تبداء بعنوان المقال وتنتهي بإمتداد <code>.md</code>
+وبلغة <code>markdown</code></p>
+<h3>من ثم تقوم بتنفيذ الامر</h3>
+<pre><code class="language-sh">$ sudo npm start
+</code></pre>
+<p>لإنشاء القوالب والمقالات</p>
+<h3>من ثم تقوم برفعها لمستودعك في github</h3>
+<pre><code class="language-sh">$ [sudo] git add .
+$ [sudo] git commit -m &quot;commit&quot;
+$ [sudo] git push
+</code></pre>
+
+    </div>
+
+
+<center>
+
+<ul class="pagination">
+    <li class="page-item active" ><a class="page-link" href="https://xlmnxp.github.io/nsb/page/1/index.html">1</a></li>
+</ul>
+
+</center>
+
+<script>
+    $(document).ready(function() {
+    $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+    });
+</script>
+</div>
+</body>
+</html>
