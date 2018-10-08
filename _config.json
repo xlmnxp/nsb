@@ -1,10 +1,10 @@
 {
     "rtl": true,
     "locale": "ar",
-    "title": "مدونة تجريبية",
-    "url": "https://xlmnxp.github.io/nsb",
+    "title": "سالم يسلم",
+    "url": "https://sy.sa/",
     "charset": "utf-8",
-    "description": "مدونة عملية جدًا",
+    "description": "مدونتي الشخصية",
     "output_folder": "out",
     "pagination":{
         "previous": "السابق",
