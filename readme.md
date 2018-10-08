@@ -5,7 +5,7 @@
 ## طريقة التركيب
 تقوم بنسخ المستودع لجهازك
 ```sh
-$ git clone https://github.com/runbb/nsb.git
+$ git clone https://github.com/xlmnxp/nsb.git
 $ cd nsb
 $ [sudo] npm install
 ```
