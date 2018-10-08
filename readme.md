@@ -1,5 +1,5 @@
 # nsb ( مدونة ثابته لـ Github Pages )
-[![Build Status](https://travis-ci.org/runbb/nsb.svg?branch=master&style=flat-square)](https://travis-ci.org/xlmnxp/nsb)
+[![Build Status](https://travis-ci.org/xlmnxp/nsb.svg?branch=master&style=flat-square)](https://travis-ci.org/xlmnxp/nsb)
 [![npm](https://img.shields.io/npm/v/npm.svg?style=flat-square)]()
 [![license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)]()
 ## طريقة التركيب
