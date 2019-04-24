@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="https://raw.githubusercontent.com/isagalaev/highlight.js/master/src/styles/vs.css">
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 
-    <% if( blog.rtl ){ %>
+    
     <!-- rtl bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-flipped.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-rtl/3.4.0/css/bootstrap-rtl.min.css" />
@@ -44,15 +44,15 @@
             direction: ltr !important;
         }
     </style>
-    <% } %>
+    
 
     <!-- momentjs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
     <script>
-        moment.locale('<%= blog.locale %>');
+        moment.locale('ar');
     </script>
-    <title><%= title %></title>
+    <title>سالم يسلم - الصفحة 1</title>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-static-top">
@@ -64,11 +64,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="<%= blog.url %>/index.html"><%= blog.title %></a>
+        <a class="navbar-brand" href="https://www.sy.sa/index.html">سالم يسلم</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
-        <li<%- (pageNumber == 1) ? " class=\"active\"" : '' %>><a href="<%= blog.url %>/index.html">الرائيسية</a></li>
+        <li class="active"><a href="https://www.sy.sa/index.html">الرائيسية</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
         </ul>
@@ -77,3 +77,64 @@
 </nav>
 <div class="container">
 
+
+
+
+    <h3><a href="https://www.sy.sa/posts/wed-apr-24-2019/انشاء-مدونة-ثابتة-(-static-)-بإستخدام-مكتبة-nsb.html">انشاء مدونة ثابتة ( Static ) بإستخدام مكتبة NSB</a></h3>
+    <p><script>document.write(moment('Wed Apr 24 2019 05:42:59 GMT+0000 (Coordinated Universal Time)').fromNow());</script></p>
+    <div class="post">
+        <h2>انشاء مدونة ثابتة ( Static ) بإستخدام مكتبة NSB</h2>
+<p>ﻻنشاء المدونة يجب اولًا ان تقوم بنسخ مستودع المكتبة لجهازك</p>
+<pre><code class="language-sh">$ git clone https://github.com/xlmnxp/nsb.git
+$ cd nsb
+$ [sudo] npm install
+</code></pre>
+<p>وتقوم بتعديل ملف الاعدادات  <code>_config.json</code> بما يناسب مدونتك</p>
+<pre><code class="language-json">{
+    &quot;rtl&quot;: true,
+    &quot;locale&quot;: &quot;ar&quot;,
+    &quot;title&quot;: &quot;اسم المدونة&quot;,
+    &quot;url&quot;: &quot;الرابط للصفحة الرائيسية من دون '/' في الاحير&quot;,
+    &quot;charset&quot;: &quot;ترميز المدونة&quot;, 
+    &quot;description&quot;: &quot;وصف المدونة&quot;,
+    &quot;pagination&quot;:{
+        &quot;previous&quot;: &quot;زر الصفحة السابقة&quot;,
+        &quot;size&quot;: &quot;عدد ازرار الارقام التي تظهر في شريط التقل بين الصفحات&quot;,
+        &quot;resultsPerPage&quot;: &quot;عدد التدوينات في الصفحة&quot;, 
+        &quot;next&quot;: &quot;زر الصفحة التالي&quot;    
+    }
+}
+</code></pre>
+<h2>إضافة مقال</h2>
+<p>تقوم بإضافة المقالات لمجلد <code>mdposts</code>
+تبداء بعنوان المقال وتنتهي بإمتداد <code>.md</code>
+وبلغة <code>markdown</code></p>
+<h3>من ثم تقوم بتنفيذ الامر</h3>
+<pre><code class="language-sh">$ sudo npm start
+</code></pre>
+<p>لإنشاء القوالب والمقالات</p>
+<h3>من ثم تقوم برفعها لمستودعك في github</h3>
+<pre><code class="language-sh">$ [sudo] git add .
+$ [sudo] git commit -m &quot;commit&quot;
+$ [sudo] git push
+</code></pre>
+
+    </div>
+
+
+<center>
+
+<ul class="pagination">
+    <li class="page-item active" ><a class="page-link" href="https://www.sy.sa/page/1/index.html">1</a></li>
+</ul>
+
+</center>
+
+<script>
+    $(document).ready(function() {
+    $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+    });
+</script>
+</div>
+</body>
+</html>
